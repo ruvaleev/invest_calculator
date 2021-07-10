@@ -1,0 +1,84 @@
+style[type="text/css"]
+  |  /* Client-specific Styles */
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: arial;
+    }
+
+    .container {
+      align-items: center;
+      width: 50%;
+    }
+
+    .flex-column {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form {
+      width: 70%;
+    }
+
+    .form div {
+      margin: 0.5em;
+    }
+
+    h4 {
+      margin: 1em;
+    }
+
+    .result {
+      margin-top: 1em;
+      font-size: 2em;
+    }
+
+.container.flex-column
+  .title
+    h4 Расчет инвестиций
+
+  .form
+    .flex-column
+      label for='start_amount' Стартовая сумма
+      input type="integer" id="start_amount" placeholder='Стартовая сумма'
+    .flex-column
+      label for='monthly_deposit' Ежемесячные пополнения
+      input type="integer" id="monthly_deposit" placeholder='Ежемесячные пополнения'
+    .flex-column
+      label for='annual_percent' Процент годовых
+      input type="integer" id="annual_percent" placeholder='Процент годовых'
+    .flex-column
+      label for='years_count' Количество лет
+      input type="integer" id="years_count" placeholder='Количество лет'
+  .result id='result'
+    '$1000
+
+javascript:
+  calculateResule = function() {
+    start_amount = Number(document.getElementById('start_amount').value)
+    monthly_deposit = Number(document.getElementById('monthly_deposit').value)
+    annual_percent = Number(document.getElementById('annual_percent').value)
+    years_count = Number(document.getElementById('years_count').value)
+
+    monthly_percent = annual_percent / 12
+    months_count = years_count * 12
+    result_amount = start_amount
+    
+    for(i = 0; i < months_count; i++) {
+      result_amount += monthly_deposit
+      result_amount += result_amount * ( monthly_percent / 100 )
+    }
+
+    result_div = document.getElementById('result')
+    result_div.innerHTML = `$${result_amount.toFixed(2)}`
+  }
+
+  inputs = document.getElementsByTagName('input')
+
+  for(i = 0; i < inputs.length; i++) {
+    inputs[i].addEventListener('keyup', (e) => {
+      e.target.value = e.target.value.replace(/[^-0-9\/]+/, "");
+      calculateResule()
+    })
+  }
